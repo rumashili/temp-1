@@ -1,13 +1,24 @@
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-let volumeSlider, pitchSlider;
+let volumeSlider, pitchSlider, volumeValue, pitchValue;
 
 window.onload = () => {
   volumeSlider = document.getElementById("volume");
   pitchSlider = document.getElementById("pitch");
+  volumeValue = document.getElementById("volumeValue");
+  pitchValue = document.getElementById("pitchValue");
 };
 
-// 母音ごとのフォルマント（ざっくり）
+// 表示更新
+volumeSlider.oninput = () => {
+  volumeValue.textContent = volumeSlider.value;
+};
+
+pitchSlider.oninput = () => {
+  pitchValue.textContent = pitchSlider.value;
+};
+
+// 母音フォルマント（ちょいリアル寄り）
 const vowels = {
   a: [700, 1100, 2500],
   i: [300, 2200, 3000],
@@ -22,27 +33,35 @@ function playVowel(vowel) {
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
 
+  // スライダー値取得
   const volume = parseFloat(volumeSlider.value);
   const pitch = parseFloat(pitchSlider.value);
 
-  osc.type = "sawtooth";
-  osc.frequency.value = pitch;
+  // 音源（柔らかめ）
+  osc.type = "triangle";
 
-  const filters = vowels[vowel].map(freq => {
+  // 微妙な揺れを追加（人間っぽさ）
+  osc.frequency.value = pitch + (Math.random() - 0.5) * 3;
+
+  // 直通音（少し混ぜると自然）
+  osc.connect(gain);
+
+  // フォルマント（並列）
+  vowels[vowel].forEach(freq => {
     const f = ctx.createBiquadFilter();
     f.type = "bandpass";
     f.frequency.value = freq;
-    f.Q.value = 15;
-    return f;
+    f.Q.value = 7; // なめらか
+
+    osc.connect(f);
+    f.connect(gain);
   });
 
-  osc.connect(filters[0]);
-  filters[0].connect(filters[1]);
-  filters[1].connect(gain);
   gain.connect(ctx.destination);
 
+  // 音量エンベロープ（ちょい強め）
   gain.gain.setValueAtTime(0, ctx.currentTime);
-  gain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.02);
+  gain.gain.linearRampToValueAtTime(volume * 2, ctx.currentTime + 0.02);
   gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
 
   osc.start();
