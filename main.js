@@ -17,32 +17,32 @@ const vowels = {
 };
 
 function playVowel(vowel) {
-  ctx.resume(); // ブラウザ対策
+  ctx.resume();
 
   const osc = ctx.createOscillator();
   const gain = ctx.createGain();
 
-  osc.type = "sawtooth"; // 声っぽい
-  osc.frequency.value = 120; // 基本周波数（声の高さ）
+  const volume = parseFloat(volumeSlider.value);
+  const pitch = parseFloat(pitchSlider.value);
 
-  // フォルマント用フィルター2つ
+  osc.type = "sawtooth";
+  osc.frequency.value = pitch;
+
   const filters = vowels[vowel].map(freq => {
     const f = ctx.createBiquadFilter();
     f.type = "bandpass";
     f.frequency.value = freq;
-    f.Q.value = 15; // 少し鋭く
+    f.Q.value = 15;
     return f;
   });
 
-  // 接続：osc → filters → gain → output
   osc.connect(filters[0]);
   filters[0].connect(filters[1]);
   filters[1].connect(gain);
   gain.connect(ctx.destination);
 
-  // 音量エンベロープ（ちょっと自然にする）
   gain.gain.setValueAtTime(0, ctx.currentTime);
-  gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + 0.02);
+  gain.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.02);
   gain.gain.linearRampToValueAtTime(0, ctx.currentTime + 0.5);
 
   osc.start();
