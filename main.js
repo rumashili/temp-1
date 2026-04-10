@@ -1,10 +1,10 @@
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-window.onload = () => {
-  const volumeSlider = document.getElementById("volume");
-  const pitchSlider = document.getElementById("pitch");
+let columeSlider, pitchSlider;
 
-  alert(String(volumeSlider) + "\n" + String(pitchSlider));
+window.onload = () => {
+  volumeSlider = document.getElementById("volume");
+  pitchSlider = document.getElementById("pitch");
 };
 
 // 母音ごとのフォルマント（ざっくり）
