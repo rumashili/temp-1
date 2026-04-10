@@ -1,6 +1,6 @@
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-let columeSlider, pitchSlider;
+let volumeSlider, pitchSlider;
 
 window.onload = () => {
   volumeSlider = document.getElementById("volume");
