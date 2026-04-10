@@ -1,5 +1,12 @@
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
+window.onload = () => {
+  const volumeSlider = document.getElementById("volume");
+  const pitchSlider = document.getElementById("pitch");
+
+  alert(String(volumeSlider) + "\n" + String(pitchSlider));
+};
+
 // 母音ごとのフォルマント（ざっくり）
 const vowels = {
   a: [700, 1100, 2500],
@@ -8,8 +15,6 @@ const vowels = {
   e: [500, 1900, 2600],
   o: [500, 1000, 2400]
 };
-
-alert(String(volumeSlider) + "\n" + String(pitchSlider));
 
 function playVowel(vowel) {
   ctx.resume(); // ブラウザ対策
