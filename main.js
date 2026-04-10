@@ -1,21 +1,10 @@
 const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
-let volumeSlider, pitchSlider, volumeValue, pitchValue;
+let volumeSlider, pitchSlider;
 
 window.onload = () => {
   volumeSlider = document.getElementById("volume");
   pitchSlider = document.getElementById("pitch");
-  volumeValue = document.getElementById("volumeValue");
-  pitchValue = document.getElementById("pitchValue");
-};
-
-// 表示更新
-volumeSlider.oninput = () => {
-  volumeValue.textContent = volumeSlider.value;
-};
-
-pitchSlider.oninput = () => {
-  pitchValue.textContent = pitchSlider.value;
 };
 
 // 母音フォルマント（ちょいリアル寄り）
