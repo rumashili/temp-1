@@ -2,11 +2,11 @@ const ctx = new (window.AudioContext || window.webkitAudioContext)();
 
 // 母音ごとのフォルマント（ざっくり）
 const vowels = {
-  a: [800, 1200],
-  i: [300, 2500],
-  u: [300, 800],
-  e: [500, 2000],
-  o: [500, 1000]
+  a: [700, 1100, 2500],
+  i: [300, 2200, 3000],
+  u: [350, 900, 2200],
+  e: [500, 1900, 2600],
+  o: [500, 1000, 2400]
 };
 
 function playVowel(vowel) {
@@ -23,7 +23,7 @@ function playVowel(vowel) {
     const f = ctx.createBiquadFilter();
     f.type = "bandpass";
     f.frequency.value = freq;
-    f.Q.value = 10;
+    f.Q.value = 15; // 少し鋭く
     return f;
   });
 
