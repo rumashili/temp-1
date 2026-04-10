@@ -9,7 +9,7 @@ const vowels = {
   o: [500, 1000, 2400]
 };
 
-alert(String(volumeSlider) + "\n" + String(pitchSlider)));
+alert(String(volumeSlider) + "\n" + String(pitchSlider));
 
 function playVowel(vowel) {
   ctx.resume(); // ブラウザ対策
